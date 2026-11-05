@@ -1,0 +1,39 @@
+name: Bug report
+description: Report a reproducible application or build problem.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: "Remove personal paths, repository contents, and credentials from logs. For vulnerabilities, follow SECURITY.md instead."
+  - type: input
+    id: version
+    attributes:
+      label: Tool version and mode
+      description: "For example: 1.0.4, compiled EXE or uncompiled source."
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Windows build, Git version, AutoIt version if relevant, and display scaling for UI problems.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Use a small disposable repository and a minimal patch when possible.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Sanitized details or test log
+      render: text

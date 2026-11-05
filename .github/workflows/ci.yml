@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository-and-git:
+    name: Repository and Git regression tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check repository metadata, local links, and icon data
+        run: python3 tools/check_repository.py
+      - name: Exercise Git behavior in disposable repositories
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+
+  windows:
+    name: Windows build and native tests
+    needs: repository-and-git
+    runs-on: windows-2022
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up the checksum-verified AutoIt toolchain
+        run: |
+          $autoItDir = & ./scripts/Setup-AutoIt.ps1
+          if ($LASTEXITCODE -and $LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          "AUTOIT_HOME=$autoItDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Build the x64 GUI application
+        run: ./scripts/Build.ps1
+      - name: Verify source and compiled application
+        run: ./scripts/Verify.ps1 -IncludeCompiled
+      - name: Package the binary and SHA-256 checksum
+        run: ./scripts/Package.ps1
+      - name: Upload verified build artifacts
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: PatchToRepo-windows-x64
+          path: |
+            dist/*.zip
+            dist/*.sha256
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve native test logs
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: PatchToRepo-native-test-logs
+          path: build/test-logs/*.log
+          if-no-files-found: ignore
+          retention-days: 14

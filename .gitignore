@@ -1,0 +1,22 @@
+# Local toolchains and generated output
+/.tools/
+/build/
+/dist/
+*.exe
+*.a3x
+*.update-*
+*.log
+
+# Python and editor state
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.vscode/
+.idea/
+*.bak
+*.tmp
+*~
+Thumbs.db
+Desktop.ini
+.DS_Store
