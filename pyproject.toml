@@ -18,7 +18,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest==8.4.2", "pytest-qt==4.5.0", "ruff==0.17.4", "build==1.6.1"]
+dev = ["pytest==9.2.0", "pytest-qt==4.5.0", "ruff==0.17.4", "build==1.6.1"]
 packaging = ["pyinstaller==6.22.3"]
 
 [project.gui-scripts]
