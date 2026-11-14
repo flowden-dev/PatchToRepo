@@ -1,0 +1,23 @@
+name: Bug report
+description: Report an application or patch handling problem
+title: "[Bug] "
+body:
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: Patch to Repo, Windows, Python (source only), and Git versions
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction
+      description: Steps, expected result, actual result. Use a small disposable sample repository when possible.
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: Copy relevant diagnostic text. Remove private source, paths, and credentials first.

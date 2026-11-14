@@ -1,0 +1,9 @@
+include LICENSE README.md CHANGELOG.md THIRD_PARTY_NOTICES.md
+include AGENTS.md CLAUDE.md CONTRIBUTING.md SECURITY.md
+include Setup-Windows.cmd Build-Windows.cmd
+recursive-include docs *.md *.png
+recursive-include licenses *
+recursive-include scripts *.py
+recursive-include tests *.py
+recursive-include src/patchtorepo/resources *
+recursive-include .github *.yml *.md
